@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compound Interest Calculator - Finance Club</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>💰 Finance Club</h1>
+            <p class="tagline">Smart Financial Tools for Better Decisions</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="compound-interest.html" class="active">Compound Interest</a></li>
+                <li><a href="emi-calculator.html">EMI Calculator</a></li>
+                <li><a href="sip-calculator.html">SIP Calculator</a></li>
+                <li><a href="roi-calculator.html">ROI Calculator</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="calculator-container">
+            <h2>📈 Compound Interest Calculator</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+                Calculate the future value of your investments with compound interest
+            </p>
+
+            <form id="compoundForm">
+                <div class="form-group">
+                    <label for="principal">Principal Amount ($)</label>
+                    <input type="number" id="principal" name="principal" required min="0" step="0.01" value="10000">
+                    <small>Initial amount you're investing</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="rate">Annual Interest Rate (%)</label>
+                    <input type="number" id="rate" name="rate" required min="0" step="0.01" value="8">
+                    <small>Expected annual return rate</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="time">Time Period (Years)</label>
+                    <input type="number" id="time" name="time" required min="0" step="0.5" value="10">
+                    <small>Investment duration</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="compound">Compound Frequency</label>
+                    <select id="compound" name="compound">
+                        <option value="1">Annually</option>
+                        <option value="2">Semi-Annually</option>
+                        <option value="4" selected>Quarterly</option>
+                        <option value="12">Monthly</option>
+                        <option value="365">Daily</option>
+                    </select>
+                    <small>How often interest is compounded</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="contribution">Additional Monthly Contribution ($)</label>
+                    <input type="number" id="contribution" name="contribution" min="0" step="0.01" value="0">
+                    <small>Optional: Regular monthly deposits (leave 0 if none)</small>
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; padding: 1rem;">Calculate</button>
+            </form>
+
+            <div id="result" class="result-container">
+                <div class="result-item">
+                    <h3>Future Value</h3>
+                    <div class="value" id="futureValue">$0.00</div>
+                </div>
+
+                <div class="breakdown">
+                    <h3>Breakdown</h3>
+                    <div class="breakdown-item">
+                        <span>Principal Amount:</span>
+                        <strong id="principalDisplay">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Total Contributions:</span>
+                        <strong id="contributionsDisplay">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Total Interest Earned:</span>
+                        <strong id="interestEarned">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Total Investment:</span>
+                        <strong id="totalInvestment">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Effective Annual Rate:</span>
+                        <strong id="effectiveRate">0.00%</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-container" style="margin-top: 2rem;">
+            <h3 style="color: #667eea; margin-bottom: 1rem;">Understanding Compound Interest</h3>
+            <p style="color: #666; margin-bottom: 1rem;">
+                Compound interest is the eighth wonder of the world. He who understands it, earns it; he who doesn't, pays it.
+            </p>
+            <p style="color: #666;">
+                The formula used: A = P(1 + r/n)^(nt) + PMT × [((1 + r/n)^(nt) - 1) / (r/n)]
+            </p>
+            <ul style="margin-top: 1rem; color: #666; line-height: 2;">
+                <li>A = Final amount</li>
+                <li>P = Principal (initial investment)</li>
+                <li>r = Annual interest rate (decimal)</li>
+                <li>n = Number of times interest compounds per year</li>
+                <li>t = Number of years</li>
+                <li>PMT = Regular monthly contribution</li>
+            </ul>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Finance Club. All rights reserved. | <a href="https://github.com">GitHub Repository</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('compoundForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get input values
+            const principal = parseFloat(document.getElementById('principal').value);
+            const rate = parseFloat(document.getElementById('rate').value) / 100;
+            const time = parseFloat(document.getElementById('time').value);
+            const compound = parseInt(document.getElementById('compound').value);
+            const monthlyContribution = parseFloat(document.getElementById('contribution').value);
+            
+            // Calculate compound interest
+            const compoundInterest = principal * Math.pow((1 + rate / compound), (compound * time));
+            
+            // Calculate future value with monthly contributions
+            let futureValueWithContributions = compoundInterest;
+            if (monthlyContribution > 0) {
+                const monthlyRate = rate / 12;
+                const totalMonths = time * 12;
+                const contributionValue = monthlyContribution * (Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate;
+                futureValueWithContributions = compoundInterest + contributionValue;
+            }
+            
+            // Calculate totals
+            const totalContributions = monthlyContribution * time * 12;
+            const totalInvested = principal + totalContributions;
+            const interestEarned = futureValueWithContributions - totalInvested;
+            
+            // Calculate effective annual rate
+            const effectiveRate = (Math.pow(1 + rate / compound, compound) - 1) * 100;
+            
+            // Display results
+            document.getElementById('futureValue').textContent = '$' + futureValueWithContributions.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('principalDisplay').textContent = '$' + principal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('contributionsDisplay').textContent = '$' + totalContributions.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('interestEarned').textContent = '$' + interestEarned.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('totalInvestment').textContent = '$' + totalInvested.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('effectiveRate').textContent = effectiveRate.toFixed(2) + '%';
+            
+            // Show results
+            document.getElementById('result').classList.add('show');
+        });
+    </script>
+</body>
+</html>

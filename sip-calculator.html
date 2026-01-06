@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIP Calculator - Finance Club</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>💰 Finance Club</h1>
+            <p class="tagline">Smart Financial Tools for Better Decisions</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="compound-interest.html">Compound Interest</a></li>
+                <li><a href="emi-calculator.html">EMI Calculator</a></li>
+                <li><a href="sip-calculator.html" class="active">SIP Calculator</a></li>
+                <li><a href="roi-calculator.html">ROI Calculator</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="calculator-container">
+            <h2>💼 SIP Calculator</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+                Calculate returns on your Systematic Investment Plan
+            </p>
+
+            <form id="sipForm">
+                <div class="form-group">
+                    <label for="monthlyInvestment">Monthly Investment ($)</label>
+                    <input type="number" id="monthlyInvestment" name="monthlyInvestment" required min="0" step="0.01" value="500">
+                    <small>Amount you plan to invest every month</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="expectedReturn">Expected Annual Return (%)</label>
+                    <input type="number" id="expectedReturn" name="expectedReturn" required min="0" step="0.1" value="12">
+                    <small>Expected annual rate of return</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="timePeriod">Investment Period (Years)</label>
+                    <input type="number" id="timePeriod" name="timePeriod" required min="1" step="1" value="10">
+                    <small>How long you plan to invest</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="stepUp">Annual Step-Up (%)</label>
+                    <input type="number" id="stepUp" name="stepUp" min="0" max="100" step="1" value="0">
+                    <small>Optional: Increase SIP amount annually by this percentage</small>
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; padding: 1rem;">Calculate SIP Returns</button>
+            </form>
+
+            <div id="result" class="result-container">
+                <div class="result-item">
+                    <h3>Maturity Value</h3>
+                    <div class="value" id="maturityValue">$0.00</div>
+                </div>
+
+                <div class="breakdown">
+                    <h3>Investment Summary</h3>
+                    <div class="breakdown-item">
+                        <span>Total Investment:</span>
+                        <strong id="totalInvestment">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Total Returns:</span>
+                        <strong id="totalReturns">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Wealth Gained:</span>
+                        <strong id="wealthGained">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Average Monthly Investment:</span>
+                        <strong id="avgMonthly">$0.00</strong>
+                    </div>
+                </div>
+
+                <div class="breakdown" style="margin-top: 1.5rem;">
+                    <h3>Returns Distribution</h3>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <div style="flex: 1; text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.1); border-radius: 5px;">
+                            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Investment</div>
+                            <div id="investmentPercentage" style="font-size: 1.5rem; font-weight: bold;">0%</div>
+                        </div>
+                        <div style="flex: 1; text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.1); border-radius: 5px;">
+                            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Returns</div>
+                            <div id="returnsPercentage" style="font-size: 1.5rem; font-weight: bold;">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-container" style="margin-top: 2rem;">
+            <h3 style="color: #667eea; margin-bottom: 1rem;">Understanding SIP</h3>
+            <p style="color: #666; margin-bottom: 1rem;">
+                SIP (Systematic Investment Plan) is an investment strategy where you invest a fixed amount regularly (monthly) in mutual funds or other investment vehicles.
+            </p>
+            <p style="color: #666; margin-bottom: 1rem;">
+                The formula used: M = P × {[(1 + r)^n - 1] / r} × (1 + r)
+            </p>
+            <ul style="margin-top: 1rem; color: #666; line-height: 2;">
+                <li>M = Maturity amount</li>
+                <li>P = Monthly investment amount</li>
+                <li>r = Expected monthly return rate (Annual rate / 12 / 100)</li>
+                <li>n = Total number of months</li>
+            </ul>
+            <p style="color: #666; margin-top: 1rem;">
+                <strong>Benefits of SIP:</strong> Rupee cost averaging, power of compounding, disciplined investing, and flexibility to start with small amounts.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Finance Club. All rights reserved. | <a href="https://github.com">GitHub Repository</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('sipForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get input values
+            let monthlyInvestment = parseFloat(document.getElementById('monthlyInvestment').value);
+            const annualReturn = parseFloat(document.getElementById('expectedReturn').value);
+            const years = parseInt(document.getElementById('timePeriod').value);
+            const stepUpPercentage = parseFloat(document.getElementById('stepUp').value);
+            
+            // Calculate monthly rate
+            const monthlyRate = annualReturn / 12 / 100;
+            const totalMonths = years * 12;
+            
+            let maturityValue = 0;
+            let totalInvested = 0;
+            
+            if (stepUpPercentage > 0) {
+                // Calculate with step-up
+                let currentMonthlyInvestment = monthlyInvestment;
+                
+                for (let year = 0; year < years; year++) {
+                    const monthsInThisYear = 12;
+                    const remainingMonths = totalMonths - (year * 12);
+                    const monthsToInvest = Math.min(monthsInThisYear, remainingMonths);
+                    
+                    // Calculate FV for this year's investments
+                    const fvThisYear = currentMonthlyInvestment * ((Math.pow(1 + monthlyRate, monthsToInvest) - 1) / monthlyRate) * (1 + monthlyRate);
+                    
+                    // Compound it for remaining years
+                    const yearsToCompound = years - year - 1;
+                    const monthsToCompound = yearsToCompound * 12 + (12 - monthsToInvest);
+                    const compoundedValue = fvThisYear * Math.pow(1 + monthlyRate, monthsToCompound);
+                    
+                    maturityValue += compoundedValue;
+                    totalInvested += currentMonthlyInvestment * monthsToInvest;
+                    
+                    // Increase monthly investment for next year
+                    currentMonthlyInvestment = currentMonthlyInvestment * (1 + stepUpPercentage / 100);
+                }
+            } else {
+                // Standard SIP calculation without step-up
+                // Formula: M = P × {[(1 + r)^n - 1] / r} × (1 + r)
+                maturityValue = monthlyInvestment * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * (1 + monthlyRate);
+                totalInvested = monthlyInvestment * totalMonths;
+            }
+            
+            // Calculate returns
+            const totalReturns = maturityValue;
+            const wealthGained = maturityValue - totalInvested;
+            const avgMonthly = totalInvested / totalMonths;
+            
+            // Calculate percentages
+            const investmentPercentage = (totalInvested / maturityValue * 100).toFixed(1);
+            const returnsPercentage = (wealthGained / maturityValue * 100).toFixed(1);
+            
+            // Display results
+            document.getElementById('maturityValue').textContent = '$' + maturityValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('totalInvestment').textContent = '$' + totalInvested.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('totalReturns').textContent = '$' + totalReturns.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('wealthGained').textContent = '$' + wealthGained.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('avgMonthly').textContent = '$' + avgMonthly.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('investmentPercentage').textContent = investmentPercentage + '%';
+            document.getElementById('returnsPercentage').textContent = returnsPercentage + '%';
+            
+            // Show results
+            document.getElementById('result').classList.add('show');
+        });
+    </script>
+</body>
+</html>

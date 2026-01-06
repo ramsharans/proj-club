@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI Calculator - Finance Club</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>💰 Finance Club</h1>
+            <p class="tagline">Smart Financial Tools for Better Decisions</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="compound-interest.html">Compound Interest</a></li>
+                <li><a href="emi-calculator.html">EMI Calculator</a></li>
+                <li><a href="sip-calculator.html">SIP Calculator</a></li>
+                <li><a href="roi-calculator.html" class="active">ROI Calculator</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="calculator-container">
+            <h2>📊 ROI Calculator</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+                Calculate Return on Investment for your ventures
+            </p>
+
+            <form id="roiForm">
+                <div class="form-group">
+                    <label for="initialInvestment">Initial Investment ($)</label>
+                    <input type="number" id="initialInvestment" name="initialInvestment" required min="0" step="0.01" value="10000">
+                    <small>Total amount invested initially</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="finalValue">Final Value ($)</label>
+                    <input type="number" id="finalValue" name="finalValue" required min="0" step="0.01" value="15000">
+                    <small>Current or final value of investment</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="additionalCosts">Additional Costs ($)</label>
+                    <input type="number" id="additionalCosts" name="additionalCosts" min="0" step="0.01" value="0">
+                    <small>Optional: Any additional costs incurred (maintenance, fees, etc.)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="timePeriod">Time Period (Years)</label>
+                    <input type="number" id="timePeriod" name="timePeriod" min="0" step="0.1" value="2">
+                    <small>Optional: Duration of investment (for annualized ROI)</small>
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; padding: 1rem;">Calculate ROI</button>
+            </form>
+
+            <div id="result" class="result-container">
+                <div class="result-item">
+                    <h3>Return on Investment (ROI)</h3>
+                    <div class="value" id="roiPercentage">0.00%</div>
+                </div>
+
+                <div class="breakdown">
+                    <h3>Investment Analysis</h3>
+                    <div class="breakdown-item">
+                        <span>Initial Investment:</span>
+                        <strong id="initialDisplay">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Final Value:</span>
+                        <strong id="finalDisplay">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Additional Costs:</span>
+                        <strong id="costsDisplay">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Total Investment:</span>
+                        <strong id="totalInvestmentDisplay">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Net Profit/Loss:</span>
+                        <strong id="netProfit">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item" id="annualizedSection" style="display: none;">
+                        <span>Annualized ROI:</span>
+                        <strong id="annualizedROI">0.00%</strong>
+                    </div>
+                </div>
+
+                <div class="breakdown" style="margin-top: 1.5rem;">
+                    <h3>Performance Indicator</h3>
+                    <div id="performanceIndicator" style="padding: 1.5rem; text-align: center; background: rgba(255, 255, 255, 0.1); border-radius: 5px;">
+                        <div style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;" id="performanceEmoji">📊</div>
+                        <div style="font-size: 1.1rem;" id="performanceText">Calculating...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-container" style="margin-top: 2rem;">
+            <h3 style="color: #667eea; margin-bottom: 1rem;">Understanding ROI</h3>
+            <p style="color: #666; margin-bottom: 1rem;">
+                ROI (Return on Investment) is a performance measure used to evaluate the efficiency or profitability of an investment.
+            </p>
+            <p style="color: #666; margin-bottom: 1rem;">
+                The formula used: ROI = [(Final Value - Total Investment) / Total Investment] × 100
+            </p>
+            <p style="color: #666; margin-bottom: 1rem;">
+                Annualized ROI = [(1 + ROI)^(1/years) - 1] × 100
+            </p>
+            <ul style="margin-top: 1rem; color: #666; line-height: 2;">
+                <li><strong>Positive ROI:</strong> Your investment has gained value</li>
+                <li><strong>Negative ROI:</strong> Your investment has lost value</li>
+                <li><strong>0% ROI:</strong> Break-even, no gain or loss</li>
+            </ul>
+            <p style="color: #666; margin-top: 1rem;">
+                <strong>Use Cases:</strong> Stock investments, real estate, business ventures, marketing campaigns, equipment purchases, and any scenario where you want to measure investment efficiency.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Finance Club. All rights reserved. | <a href="https://github.com">GitHub Repository</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('roiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get input values
+            const initialInvestment = parseFloat(document.getElementById('initialInvestment').value);
+            const finalValue = parseFloat(document.getElementById('finalValue').value);
+            const additionalCosts = parseFloat(document.getElementById('additionalCosts').value) || 0;
+            const timePeriod = parseFloat(document.getElementById('timePeriod').value) || 0;
+            
+            // Calculate total investment
+            const totalInvestment = initialInvestment + additionalCosts;
+            
+            // Calculate net profit/loss
+            const netProfit = finalValue - totalInvestment;
+            
+            // Calculate ROI percentage
+            const roiPercentage = (netProfit / totalInvestment) * 100;
+            
+            // Calculate annualized ROI if time period is provided
+            let annualizedROI = 0;
+            let showAnnualized = false;
+            
+            if (timePeriod > 0) {
+                // Annualized ROI = [(1 + ROI)^(1/years) - 1] × 100
+                const roiDecimal = roiPercentage / 100;
+                annualizedROI = (Math.pow(1 + roiDecimal, 1 / timePeriod) - 1) * 100;
+                showAnnualized = true;
+            }
+            
+            // Determine performance
+            let performanceEmoji, performanceText, performanceColor;
+            
+            if (roiPercentage > 20) {
+                performanceEmoji = '🚀';
+                performanceText = 'Excellent Return!';
+                performanceColor = '#4CAF50';
+            } else if (roiPercentage > 10) {
+                performanceEmoji = '📈';
+                performanceText = 'Great Return!';
+                performanceColor = '#8BC34A';
+            } else if (roiPercentage > 0) {
+                performanceEmoji = '✅';
+                performanceText = 'Positive Return';
+                performanceColor = '#CDDC39';
+            } else if (roiPercentage === 0) {
+                performanceEmoji = '➖';
+                performanceText = 'Break Even';
+                performanceColor = '#FFC107';
+            } else if (roiPercentage > -10) {
+                performanceEmoji = '⚠️';
+                performanceText = 'Small Loss';
+                performanceColor = '#FF9800';
+            } else {
+                performanceEmoji = '📉';
+                performanceText = 'Significant Loss';
+                performanceColor = '#F44336';
+            }
+            
+            // Display results
+            document.getElementById('roiPercentage').textContent = roiPercentage.toFixed(2) + '%';
+            document.getElementById('initialDisplay').textContent = '$' + initialInvestment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('finalDisplay').textContent = '$' + finalValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('costsDisplay').textContent = '$' + additionalCosts.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('totalInvestmentDisplay').textContent = '$' + totalInvestment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            
+            const netProfitElement = document.getElementById('netProfit');
+            netProfitElement.textContent = '$' + netProfit.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            netProfitElement.style.color = netProfit >= 0 ? '#4CAF50' : '#F44336';
+            
+            // Show/hide annualized ROI
+            const annualizedSection = document.getElementById('annualizedSection');
+            if (showAnnualized) {
+                annualizedSection.style.display = 'flex';
+                document.getElementById('annualizedROI').textContent = annualizedROI.toFixed(2) + '% per year';
+            } else {
+                annualizedSection.style.display = 'none';
+            }
+            
+            // Display performance indicator
+            document.getElementById('performanceEmoji').textContent = performanceEmoji;
+            document.getElementById('performanceText').textContent = performanceText;
+            document.getElementById('performanceIndicator').style.borderLeft = '5px solid ' + performanceColor;
+            
+            // Show results
+            document.getElementById('result').classList.add('show');
+        });
+    </script>
+</body>
+</html>

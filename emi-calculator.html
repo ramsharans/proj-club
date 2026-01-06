@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI Calculator - Finance Club</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>💰 Finance Club</h1>
+            <p class="tagline">Smart Financial Tools for Better Decisions</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="compound-interest.html">Compound Interest</a></li>
+                <li><a href="emi-calculator.html" class="active">EMI Calculator</a></li>
+                <li><a href="sip-calculator.html">SIP Calculator</a></li>
+                <li><a href="roi-calculator.html">ROI Calculator</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="calculator-container">
+            <h2>🏠 EMI Calculator</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem;">
+                Calculate your Equated Monthly Installment for loans
+            </p>
+
+            <form id="emiForm">
+                <div class="form-group">
+                    <label for="loanAmount">Loan Amount ($)</label>
+                    <input type="number" id="loanAmount" name="loanAmount" required min="0" step="0.01" value="300000">
+                    <small>Total loan amount you need</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="interestRate">Annual Interest Rate (%)</label>
+                    <input type="number" id="interestRate" name="interestRate" required min="0" step="0.01" value="7.5">
+                    <small>Annual interest rate charged by lender</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="loanTenure">Loan Tenure</label>
+                    <input type="number" id="loanTenure" name="loanTenure" required min="1" value="20">
+                    <small>Loan duration</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="tenureType">Tenure Type</label>
+                    <select id="tenureType" name="tenureType">
+                        <option value="years" selected>Years</option>
+                        <option value="months">Months</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn" style="width: 100%; padding: 1rem;">Calculate EMI</button>
+            </form>
+
+            <div id="result" class="result-container">
+                <div class="result-item">
+                    <h3>Monthly EMI</h3>
+                    <div class="value" id="emiAmount">$0.00</div>
+                </div>
+
+                <div class="breakdown">
+                    <h3>Loan Summary</h3>
+                    <div class="breakdown-item">
+                        <span>Loan Amount:</span>
+                        <strong id="principalAmount">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Total Interest:</span>
+                        <strong id="totalInterest">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Total Payment:</span>
+                        <strong id="totalPayment">$0.00</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Interest Rate (Monthly):</span>
+                        <strong id="monthlyRate">0.00%</strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Loan Tenure:</span>
+                        <strong id="tenureDisplay">0 months</strong>
+                    </div>
+                </div>
+
+                <div class="breakdown" style="margin-top: 1.5rem;">
+                    <h3>Payment Distribution</h3>
+                    <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                        <div style="flex: 1; text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.1); border-radius: 5px;">
+                            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Principal</div>
+                            <div id="principalPercentage" style="font-size: 1.5rem; font-weight: bold;">0%</div>
+                        </div>
+                        <div style="flex: 1; text-align: center; padding: 1rem; background: rgba(255, 255, 255, 0.1); border-radius: 5px;">
+                            <div style="font-size: 0.9rem; margin-bottom: 0.5rem;">Interest</div>
+                            <div id="interestPercentage" style="font-size: 1.5rem; font-weight: bold;">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="calculator-container" style="margin-top: 2rem;">
+            <h3 style="color: #667eea; margin-bottom: 1rem;">Understanding EMI</h3>
+            <p style="color: #666; margin-bottom: 1rem;">
+                EMI (Equated Monthly Installment) is a fixed payment amount made by a borrower to a lender at a specified date each calendar month.
+            </p>
+            <p style="color: #666; margin-bottom: 1rem;">
+                The formula used: EMI = [P × r × (1 + r)^n] / [(1 + r)^n - 1]
+            </p>
+            <ul style="margin-top: 1rem; color: #666; line-height: 2;">
+                <li>P = Principal loan amount</li>
+                <li>r = Monthly interest rate (Annual rate / 12 / 100)</li>
+                <li>n = Number of monthly installments</li>
+            </ul>
+            <p style="color: #666; margin-top: 1rem;">
+                <strong>Tips:</strong> A higher down payment or shorter tenure reduces total interest paid. Compare offers from different lenders to get the best rate.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Finance Club. All rights reserved. | <a href="https://github.com">GitHub Repository</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('emiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get input values
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const annualRate = parseFloat(document.getElementById('interestRate').value);
+            let tenure = parseInt(document.getElementById('loanTenure').value);
+            const tenureType = document.getElementById('tenureType').value;
+            
+            // Convert tenure to months
+            const tenureInMonths = tenureType === 'years' ? tenure * 12 : tenure;
+            
+            // Calculate monthly interest rate
+            const monthlyRate = annualRate / 12 / 100;
+            
+            // Calculate EMI using formula: [P x r x (1+r)^n] / [(1+r)^n-1]
+            let emi;
+            if (monthlyRate === 0) {
+                emi = loanAmount / tenureInMonths;
+            } else {
+                const factor = Math.pow(1 + monthlyRate, tenureInMonths);
+                emi = (loanAmount * monthlyRate * factor) / (factor - 1);
+            }
+            
+            // Calculate totals
+            const totalPayment = emi * tenureInMonths;
+            const totalInterest = totalPayment - loanAmount;
+            
+            // Calculate percentages
+            const principalPercentage = (loanAmount / totalPayment * 100).toFixed(1);
+            const interestPercentage = (totalInterest / totalPayment * 100).toFixed(1);
+            
+            // Display results
+            document.getElementById('emiAmount').textContent = '$' + emi.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('principalAmount').textContent = '$' + loanAmount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('totalInterest').textContent = '$' + totalInterest.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('totalPayment').textContent = '$' + totalPayment.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            document.getElementById('monthlyRate').textContent = (monthlyRate * 100).toFixed(4) + '%';
+            document.getElementById('tenureDisplay').textContent = tenureInMonths + ' months (' + (tenureInMonths / 12).toFixed(1) + ' years)';
+            document.getElementById('principalPercentage').textContent = principalPercentage + '%';
+            document.getElementById('interestPercentage').textContent = interestPercentage + '%';
+            
+            // Show results
+            document.getElementById('result').classList.add('show');
+        });
+    </script>
+</body>
+</html>
